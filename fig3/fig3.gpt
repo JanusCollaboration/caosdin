@@ -1,0 +1,69 @@
+reset
+set auto
+set term epslatex size 6,3 color colortext 16 font ",12" standalone
+set output "fig3.tex"
+
+############################                     
+#ColorBlind friendly palette                     
+############################
+
+colorSet(name, rgb) = sprintf("color_%s = %d", name, rgb)  
+colorGet(name) = value(sprintf("color_%s", name))          
+ 
+eval colorSet("c1", 0x999999)                  
+eval colorSet("c2", 0xe69f00)                   
+eval colorSet("c3", 0x56b4e9)                   
+eval colorSet("c4", 0x009e73)                   
+eval colorSet("c5", 0xcc79a7)                   
+eval colorSet("c6", 0x0072b2)                   
+eval colorSet("c7", 0xd55e00)                   
+eval colorSet("c8", 0xf0e442)
+TOP=0.945
+BOTTOM=0.15
+LEFT=0.11
+RIGHT=0.999
+MIDDLE=LEFT+(RIGHT-LEFT)/2
+
+
+set logs y
+set key top left
+
+set ylabel "$F(X,T_1,T_2,\\xi,r)$" offset 3,0
+set xlabel "$X^{s,r}_{T_1,T_2}(\\xi)$" offset 0,0.4
+
+
+set multiplot layout 1,2 margins 0.1,0.95,0.12,0.9 spacing 0,0
+
+set xtics 0.75,0.05,1
+
+set tmargin at screen TOP
+set bmargin at screen BOTTOM
+set lmargin at screen LEFT
+set rmargin at screen MIDDLE
+
+
+set title "$T_1=0.625$ ; $T_2=0.9$ ; $r=4$" offset 0,-1
+p "data/data_xi9_r04.txt" u 2:1:3 pt -1 lw 3 lc rgb colorGet("c6")  w xerrorbars t "$\\xi=9$",\
+"data/data_xi8_r04.txt" u 2:1:3 pt -1 lw 3 lc rgb colorGet("c5")  w xerrorbars t "$\\xi=8$",\
+"data/data_xi7_r04.txt" u 2:1:3 pt -1 lw 3 lc rgb colorGet("c4")  w xerrorbars t "$\\xi=7$",\
+"data/data_xi6_r04.txt" u 2:1:3 pt -1 lw 3 lc rgb colorGet("c3")  w xerrorbars t "$\\xi=6$",\
+"data/data_xi5_r04.txt" u 2:1:3 pt -1 lw 3 lc rgb colorGet("c2")  w xerrorbars t "$\\xi=5$"
+
+
+unset ylabel
+unset ytics
+set xtics 0.75,0.05,1
+set tmargin at screen TOP
+set bmargin at screen BOTTOM
+set lmargin at screen MIDDLE
+set rmargin at screen RIGHT
+
+set title "$T_1=0.625$ ; $T_2=0.9$ ; $r=8$"
+p "data/data_xi9_r08.txt" u 2:1:3 pt -1 lw 3 lc rgb colorGet("c6")  w xerrorbars t "$\\xi=9$",\
+"data/data_xi8_r08.txt" u 2:1:3 pt -1 lw 3 lc rgb colorGet("c5")  w xerrorbars t "$\\xi=8$",\
+"data/data_xi7_r08.txt" u 2:1:3 pt -1 lw 3 lc rgb colorGet("c4")  w xerrorbars t "$\\xi=7$",\
+"data/data_xi6_r08.txt" u 2:1:3 pt -1 lw 3 lc rgb colorGet("c3")  w xerrorbars t "$\\xi=6$",\
+"data/data_xi5_r08.txt" u 2:1:3 pt -1 lw 3 lc rgb colorGet("c2")  w xerrorbars t "$\\xi=5$"
+
+unset multiplot
+

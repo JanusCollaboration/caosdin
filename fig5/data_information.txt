@@ -1,0 +1,5 @@
+Column 1: F
+Column 2: $T_1$
+Column 3: $T_2$
+Column 4: $\xi^*$
+Column 5: Error of $\xi^*$

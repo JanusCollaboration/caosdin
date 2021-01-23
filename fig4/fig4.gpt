@@ -1,0 +1,171 @@
+reset
+set auto
+set term epslatex size 8,4 color colortext 16 font ",14" standalone
+
+set output "fig4.tex"
+
+############################
+#ColorBlind friendly palette
+############################
+colorSet(name, rgb) = sprintf("color_%s = %d", name, rgb)
+colorGet(name) = value(sprintf("color_%s", name))
+
+eval colorSet("c1", 0x999999)
+eval colorSet("c2", 0xe69f00)
+eval colorSet("c3", 0x56b4e9)
+eval colorSet("c4", 0x009e73)
+eval colorSet("c5", 0xcc79a7)
+eval colorSet("c6", 0x0072b2)
+eval colorSet("c7", 0xd55e00)
+eval colorSet("c8", 0xf0e442)
+
+
+################ FUNCTION ################
+f(x) = (a*x**b)/(1+c*x**d)
+####################################################################
+set xlabel "$N_r^{1/3}$" offset 0,0.4
+set ylabel "$1-X(F,T_1,T_2,\\xi,r)$" offset 1,0
+
+TOP=0.97
+BOTTOM=0.13
+LEFT=0.10
+RIGHT=0.99
+DH=0.09
+MIDDLE_V=(TOP-BOTTOM)/2.+BOTTOM
+MIDDLE_H1=(RIGHT-LEFT)/2. - DH/2.+ LEFT
+MIDDLE_H2=(RIGHT-LEFT)/2. + DH/2. + LEFT
+
+
+set multiplot layout 2,2 margins 0.08,0.99,0.11,0.95 spacing 0.09,0.17
+#####################################################################
+########################## PRIMER PLOT ##############################
+#####################################################################
+set tmargin at screen TOP
+set bmargin at screen MIDDLE_V
+set lmargin at screen LEFT
+set rmargin at screen MIDDLE_H1
+unset xlabel
+set ylabel "$1-X(F,T_1,T_2,\\xi,r)$" offset 1,-5
+unset xtics
+
+
+xi="7"
+T1="07"
+T2="09"
+F="0.001"
+T1_title="0.7"
+T2_title="0.9"
+set ytics (0.05,0.06,0.07,0.08)
+set yrange [0.04999999999:0.081]
+
+fit f(x) "<awk '($1==".sprintf("%s",xi)."){print $0}' data/data_T".sprintf("%s%s",T1,T2)."_F".sprintf("%s",F).".txt" u 2:3:4 yerrors via a,b,c,d
+rcs_f=FIT_WSSR/FIT_NDF
+
+set label "$T_1=".sprintf("%s",T1_title)."$"  offset 0,-0.7 at screen 0.15,0.71
+set label "$T_2=".sprintf("%s",T2_title)."$"  offset 0,-0.7 at screen 0.15,0.66
+set label "$F=".sprintf("%s",F)."$" offset 0,-0.7 at screen 0.15,0.61
+
+p "<awk '($1==".sprintf("%s",xi)."){print $0}' data/data_T".sprintf("%s%s",T1,T2)."_F".sprintf("%s",F).".txt" u 2:3:4 w e pt -1 lw 4 lc rgb colorGet("c4") t "$\\xi=".sprintf("%s",xi)."$",\
+f(x) lw 4 lc rgb colorGet("c4") not
+unset label
+
+
+#####################################################################
+########################## SEGUNDO PLOT #############################
+#####################################################################
+set tmargin at screen TOP
+set bmargin at screen MIDDLE_V
+set lmargin at screen MIDDLE_H2
+set rmargin at screen RIGHT
+unset xlabel
+unset ylabel
+unset xtics
+
+
+xi="5"
+T1="0625"
+T2="08"
+F="0.001"
+T1_title="0.625"
+T2_title="0.8"
+set yrange [0.0159999999:0.032000000000001]
+set ytics 0.016,0.004,0.032
+
+fit f(x) "<awk '($1==".sprintf("%s",xi)."){print $0}' data/data_T".sprintf("%s%s",T1,T2)."_F".sprintf("%s",F).".txt" u 2:3:4 yerrors via a,b,c,d
+rcs_f=FIT_WSSR/FIT_NDF
+
+set label "$T_1=".sprintf("%s",T1_title)."$"  offset 0,-0.7 at screen 0.6,0.71
+set label "$T_2=".sprintf("%s",T2_title)."$"  offset 0,-0.7 at screen 0.6,0.66
+set label "$F=".sprintf("%s",F)."$" offset 0,-0.7 at screen 0.6,0.61 
+
+p "<awk '($1==".sprintf("%s",xi)."){print $0}' data/data_T".sprintf("%s%s",T1,T2)."_F".sprintf("%s",F).".txt" u 2:3:4 w e pt -1 lw 4 lc rgb colorGet("c2") t "$\\xi=".sprintf("%s",xi)."$",\
+f(x) lw 4 lc rgb colorGet("c2") not
+unset label
+
+
+#####################################################################
+########################## TERCER PLOT ##############################
+#####################################################################
+set tmargin at screen MIDDLE_V
+set bmargin at screen BOTTOM
+set lmargin at screen LEFT
+set rmargin at screen MIDDLE_H1
+set xlabel "$N_r^{1/3}$" offset 0,0.4
+#set ylabel "$1-X(F,T_1,T_2,\\xi,r)$" offset 1,0
+set xtics
+
+
+xi="6"
+T1="07"
+T2="10"
+F="0.01"
+T1_title="0.7"
+T2_title="1.0"
+set ytics 0.05,0.01,0.08
+set yrange [0.04999999999999: 0.083]
+
+fit f(x) "<awk '($1==".sprintf("%s",xi)."){print $0}' data/data_T".sprintf("%s%s",T1,T2)."_F".sprintf("%s",F).".txt" u 2:3:4 yerrors via a,b,c,d
+rcs_f=FIT_WSSR/FIT_NDF
+
+set label "$T_1=".sprintf("%s",T1_title)."$"  offset 0,-0.7 at screen 0.2,0.29
+set label "$T_2=".sprintf("%s",T2_title)."$"  offset 0,-0.7 at screen 0.2,0.24
+set label "$F=".sprintf("%s",F)."$" offset 0,-0.7 at screen 0.2,0.19
+
+p "<awk '($1==".sprintf("%s",xi)."){print $0}' data/data_T".sprintf("%s%s",T1,T2)."_F".sprintf("%s",F).".txt" u 2:3:4 w e pt -1 lw 4 lc rgb colorGet("c3") t "$\\xi=".sprintf("%s",xi)."$",\
+f(x) lw 4 lc rgb colorGet("c3") not
+unset label
+
+#####################################################################
+########################## CUARTO PLOT ##############################
+#####################################################################
+set tmargin at screen MIDDLE_V
+set bmargin at screen BOTTOM
+set lmargin at screen MIDDLE_H2
+set rmargin at screen RIGHT
+unset ylabel
+set xlabel "$N_r^{1/3}$" offset 0,0.4
+set xtics
+
+
+xi="7"
+T1="0625"
+T2="09"
+F="0.01"
+T1_title="0.625"
+T2_title="0.9"
+set ytics 0.06,0.01,0.09
+set yrange [0.0599999999999:0.0970001]
+
+fit f(x) "<awk '($1==".sprintf("%s",xi)."){print $0}' data/data_T".sprintf("%s%s",T1,T2)."_F".sprintf("%s",F).".txt" u 2:3:4 yerrors via a,b,c,d
+rcs_f=FIT_WSSR/FIT_NDF
+
+set label "$T_1=".sprintf("%s",T1_title)."$"  offset 0,-0.7 at screen 0.7,0.29
+set label "$T_2=".sprintf("%s",T2_title)."$"  offset 0,-0.7 at screen 0.7,0.24
+set label "$F=".sprintf("%s",F)."$" offset 0,-0.7 at screen 0.7,0.19
+
+p "<awk '($1==".sprintf("%s",xi)."){print $0}' data/data_T".sprintf("%s%s",T1,T2)."_F".sprintf("%s",F).".txt" u 2:3:4 w e pt -1 lw 4 lc rgb colorGet("c4") t "$\\xi=".sprintf("%s",xi)."$",\
+f(x) lw 4 lc rgb colorGet("c4") not
+unset label
+
+
+unset multiplot

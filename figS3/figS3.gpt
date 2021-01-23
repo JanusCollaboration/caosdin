@@ -1,0 +1,60 @@
+reset
+set auto
+
+############################
+#ColorBlind friendly palette
+############################
+colorSet(name, rgb) = sprintf("color_\%s = \%d", name, rgb)
+colorGet(name) = value(sprintf("color_\%s", name))
+
+eval colorSet("c1", 0x999999)
+eval colorSet("c2", 0xe69f00)
+eval colorSet("c3", 0x56b4e9)
+eval colorSet("c4", 0x009e73)
+eval colorSet("c5", 0xcc79a7)
+eval colorSet("c6", 0x0072b2)
+eval colorSet("c7", 0xd55e00)
+eval colorSet("c8", 0x9400d3)
+eval colorSet("c9", 0xf0e442)
+
+
+f(x) = a*x**b/(1+c*x**d)
+g(x) = ga*x**gb/(1+gc*x**gd)
+
+xi="7"
+F="0.01"
+T1="07"
+T2="09"
+
+set term epslatex size 8,6 color colortext 16 font ",17" standalone
+set output "figS3_top.tex"
+
+fit f(x) "<awk '($1==".sprintf("%s",xi)."){print $2,$4,$5}' data/data_final_errores_F".sprintf("%s",F).".txt" u 1:2:3 yerrors via a,b,c,d 
+chi2_old=FIT_WSSR/FIT_NDF
+
+set key bottom right
+set ylabel "\$1-X^{s,r}_{T_1,T_2}(\\xi)\$"
+set xlabel "Region size"	
+
+fit g(x) "<awk '($1==".sprintf("%s",xi)."){print $3,$4,$5}' data/data_final_errores_F".sprintf("%s",F).".txt" u 1:2:3 yerrors via ga,gb,gc,gd 
+
+p [0:7] "<awk '($1==".sprintf("%s",xi)." && $2<4.5){print $2,$4,$5}' data/data_final_errores_F".sprintf("%s",F).".txt" u 1:2:3 w e lw 3 lc rgb colorGet("c2") not , f(x) lw 3 lc rgb colorGet("c2") t "Independent variable \$r\$",\
+"<awk '($1==".sprintf("%s",xi)." && $3<7){print $3,$4,$5}' data/data_final_errores_F".sprintf("%s",F).".txt" u 1:2:3 w e lc rgb colorGet("c3") lw 3 not, g(x) lw 3 lc rgb colorGet("c3") t "Independent variable \$N_r^{1/3}\$"
+
+
+reset
+
+set term epslatex size 8,6 color colortext 16 font ",17" standalone
+set output "figS3_bot.tex"
+
+cte=((4./3.)*acos(-1.))**(1./3.)
+
+
+#set title "N^{1/3} vs r"
+set key bottom right
+
+set xlabel "\$r\$"
+set ylabel "\$V^{1/3}\$"
+
+p [:5.1] cte*x lw 3 lc rgb colorGet("c3") t "$(\\frac{4}{3}\\pi)^{1/3} \\, r $", "data/r_to_spin_number_steps.txt" u 1:($2**(1./3.)) w steps lw 3 lc rgb colorGet("c2") t "\$N_r^{1/3}\$", "data/r_to_spin_number_steps.txt" u 1:($2**(1./3.)) every 10::10 pt 7 lc rgb "black" ps 1.4 not
+

@@ -1,0 +1,57 @@
+################################### Grafica comparativa extrapolacion lineal y cuadratica T0708  #####################################
+reset
+set auto
+set term epslatex size 12,8 color colortext 16 font ",20" standalone
+set output "figS1.tex"
+
+############################
+#ColorBlind friendly palette
+############################
+colorSet(name, rgb) = sprintf("color_\%s = \%d", name, rgb)
+colorGet(name) = value(sprintf("color_\%s", name))
+
+eval colorSet("c1", 0x999999)
+eval colorSet("c2", 0xe69f00)
+eval colorSet("c3", 0x56b4e9)
+eval colorSet("c4", 0x009e73)
+eval colorSet("c5", 0xcc79a7)
+eval colorSet("c6", 0x0072b2)
+eval colorSet("c7", 0xd55e00)
+eval colorSet("c8", 0x9400d3)
+eval colorSet("c9", 0xf0e442)
+
+set xrange [:1.01]
+set key bottom right
+set xlabel "$X$" offset 0,0.7
+set ylabel "F($X,T_1,T_2,\\xi,r$)" offset 0.7,0
+
+set multiplot
+p "< awk '($4/$5<1.1){print $0}' data/extrapola_r08_nbcomplete_po1_X.txt" u ($2-$3):1 w l t "linear" lc rgb colorGet("c2") lw 2,\
+"" u ($2+$3):1 w l lc rgb colorGet("c2") lw 2 not,\
+"< awk '($4/$5<1.1){print $0}' data/extrapola_r08_nbcomplete_po2_X.txt" u ($2-$3):1 w l t "quadratic" lc rgb colorGet("c3") lw 2,\
+"" u ($2+$3):1 w l not lc rgb colorGet("c3") lw 2,\
+"data/dist_comp_errores_horizontal_ws512_r08_nb000000_X.txt" u 1:2:3 w xerrorbars t "$N_{\\mathrm{Rep}}=512$" lw 3 lc rgb colorGet("c4"),\
+"data/dist_comp_errores_horizontal_ws256_r08_nbcomplete_X.txt" u 1:2:3 w xerrorbars t "$N_{\\mathrm{Rep}}=256$" lw 3 lc rgb colorGet("c5")
+
+unset title
+unset xlabel
+unset ylabel
+set key top left
+set origin 0.06,0.25
+set size 0.65,0.65
+set logs y
+p "< awk '($4/$5<1.1){print $0}' data/extrapola_r08_nbcomplete_po1_X.txt" u ($2-$3):1 w l lc rgb colorGet("c2") lw 2 t "linear",\
+"" u ($2+$3):1 w l lc rgb colorGet("c2") lw 2 not,\
+"< awk '($4/$5<1.1){print $0}' data/extrapola_r08_nbcomplete_po2_X.txt" u ($2-$3):1 w l lc rgb colorGet("c3") lw 2 t "quadratic",\
+"" u ($2+$3):1 w l lc rgb colorGet("c3") lw 2 not,\
+"data/dist_comp_errores_horizontal_ws512_r08_nb000000_X.txt" u 1:2:3 w xerrorbars t "$N_{\\mathrm{Rep}}=512$" lw 3 lc rgb colorGet("c4"),\
+"data/dist_comp_errores_horizontal_ws256_r08_nbcomplete_X.txt" u 1:2:3 w xerrorbars t "$N_{\\mathrm{Rep}}=256$" lw 3 lc rgb colorGet("c5")
+unset multiplot
+
+
+
+
+
+
+
+

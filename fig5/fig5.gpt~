@@ -1,0 +1,70 @@
+reset
+set auto
+set term epslatex size 8,4 color colortext 16 font ",14" standalone
+
+set output "fig5.tex"
+
+############################
+#ColorBlind friendly palette
+############################
+colorSet(name, rgb) = sprintf("color_\%s = \%d", name, rgb)
+colorGet(name) = value(sprintf("color_\%s", name))
+
+eval colorSet("c1", 0x999999)
+eval colorSet("c2", 0xe69f00)
+eval colorSet("c3", 0x56b4e9)
+eval colorSet("c4", 0x009e73)
+eval colorSet("c5", 0xcc79a7)
+eval colorSet("c6", 0x0072b2)
+eval colorSet("c7", 0xd55e00)
+eval colorSet("c8", 0x9400d3)
+eval colorSet("c9", 0xf0e442)
+
+zeta=1.19
+a=5
+f(x) = a*x**(-1./zeta)
+
+set logs y
+set logs x
+set ylabel "$\\xi^*$" offset 0.7,0
+set xlabel "$(T_2-T_1)$" offset 0,0.65
+#set xrange [1.99:7.01]
+set yrange [12:55]
+set xtics (0.1,0.2,0.3,0.4) offset -0.25,0
+set ytics (20,30,40,50) offset 0,-0.25
+set key top right
+
+TOP=0.99
+BOTTOM=0.11
+LEFT=0.07
+RIGHT=0.99
+
+set tmargin at screen TOP
+set bmargin at screen BOTTOM
+set lmargin at screen LEFT
+set rmargin at screen RIGHT
+
+### FITS 
+fit f(x) "< awk '($1==0.001 && $2==0.625){print $0}' zeta_exponent_data.txt" u ($3-$2):4:5 yerrors via a
+
+a0=a
+
+fit f(x) "< awk '($1==0.01 && $2==0.625 && $3!=1.0){print $0}' zeta_exponent_data.txt" u ($3-$2):4:5 yerrors via a
+
+a1=a
+
+fit f(x) "< awk '($1==0.001 && $2==0.7){print $0}' zeta_exponent_data.txt" u ($3-$2):4:5 yerrors via a
+
+a2=a
+
+fit f(x) "< awk '($1==0.01 && $2==0.7){print $0}' zeta_exponent_data.txt" u ($3-$2):4:5 yerrors via a
+
+a3=a
+
+### PLOTS
+
+p [0.09:0.400000001] "< awk '($1==0.01 && $2==0.7){print $0}' zeta_exponent_data.txt" u (($3-$2)):4:5 w yerrorbars lc rgb colorGet("c5") lw 3 t "$F=0.01 \\quad T_1=0.7$", a3*x**(-1./zeta) not lw 3 lc rgb colorGet("c5"),\
+"< awk '($1==0.01 && $2==0.625){print $0}' zeta_exponent_data.txt" u (($3-$2)):4:5 w yerrorbars lc rgb colorGet("c3") lw 3 t "$F=0.01 \\quad T_1=0.625$", a1*x**(-1./zeta) not lw 3 lc rgb colorGet("c3"),\
+"< awk '($1==0.001 && $2==0.7){print $0}' zeta_exponent_data.txt" u (($3-$2)):4:5 w yerrorbars lc rgb colorGet("c4") lw 3 t "$F=0.001 \\quad T_1=0.7$", a2*x**(-1./zeta) not lw 3 lc rgb colorGet("c4"),\
+"< awk '($1==0.001 && $2==0.625){print $0}' zeta_exponent_data.txt" u (($3-$2)):4:5 w yerrorbars lc rgb colorGet("c2") lw 3 t "$F=0.001 \\quad T_1=0.625$", a0*x**(-1./zeta) not lw 3 lc rgb colorGet("c2")
+

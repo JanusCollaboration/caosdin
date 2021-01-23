@@ -1,0 +1,10 @@
+** File data/data_final_errores_F0.01.txt **
+Column 1: $\xi$
+Column 2: $r$ of the sphere
+Column 3: $N_r^{1/3}$
+Column 4: 1-X (complementary of the chaotic parameter)
+Column 5: Error of 1-X
+
+** File data/r_to_spin_number_steps.txt **
+Column 1: $r$ of the sphere
+Column 2: $N_r$ of the sphere

@@ -1,0 +1,10 @@
+**File data/curva_extrapolada_free_expo_T0708_X11_r08_X.txt**
+Column 1: F(X)
+Column 2: Chaotic parameter X of the infinte number of replicas extrapolated curve
+Column 3: $\chi^2$ per degree of freedom (fit)
+Column 4: Exponent of the fit
+
+**Files data/dist_comp_errores_horizontal_ws???_r08_nb000000_X.txt**
+Column 1: Chaotic parameter X of the sample with ??? replicas
+Column 2: F(X)
+Column 3: Error of the chaotic parameter

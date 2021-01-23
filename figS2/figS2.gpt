@@ -1,0 +1,95 @@
+reset
+set auto
+set term epslatex size 14,9  color colortext 16 font ",20" standalone
+set output "figS2.tex"
+
+############################
+#ColorBlind friendly palette
+############################
+colorSet(name, rgb) = sprintf("color_\%s = \%d", name, rgb)
+colorGet(name) = value(sprintf("color_\%s", name))
+
+eval colorSet("c1", 0x999999)
+eval colorSet("c2", 0xe69f00)
+eval colorSet("c3", 0x56b4e9)
+eval colorSet("c4", 0x009e73)
+eval colorSet("c5", 0xcc79a7)
+eval colorSet("c6", 0x0072b2)
+eval colorSet("c7", 0xd55e00)
+eval colorSet("c8", 0x9400d3)
+eval colorSet("c9", 0xf0e442)
+
+
+#set title "$T_1 = 0.7 \\>\\>$   $T_2 =0.8\\>\\>$   $\\xi(t_w)=11\\>\\>$   $r=8$"
+set key at graph 0.48,0.98 vertical maxrows 4
+
+set multiplot
+
+set logs y
+
+set object 1 rect from 0.986,0.3 to 0.988,0.44 front fillstyle empty border -1
+set arrow nohead from 0.986,0.44 to 1.08,0.150 front
+set arrow nohead from 0.988,0.44 to 1.254,0.150 front
+
+set xlabel "$X$" offset 0,0.3
+set ylabel "F($X,T_1,T_2,\\xi,r$)" offset 1.8,0
+
+p "data/dist_comp_errores_horizontal_ws512_r08_nb000000_X.txt" u 1:2:3 w xerrorbars lw 2 lc rgb colorGet("c2") t "$N_{\\mathrm{Rep}}=512$",\
+"data/dist_comp_errores_horizontal_ws256_r08_nb000000_X.txt" u 1:2:3 w xerrorbars lw 2 lc rgb colorGet("c3") t "$N_{\\mathrm{Rep}}=256$",\
+"data/dist_comp_errores_horizontal_ws064_r08_nb000000_X.txt" u 1:2:3 w xerrorbars lw 2 lc rgb colorGet("c4") t "$N_{\\mathrm{Rep}}=128$",\
+"data/dist_comp_errores_horizontal_ws128_r08_nb000000_X.txt" u 1:2:3 w xerrorbars lw 2 lc rgb colorGet("c5") t "$N_{\\mathrm{Rep}}=64$ ",\
+"data/dist_comp_errores_horizontal_ws032_r08_nb000000_X.txt" u 1:2:3 w xerrorbars lw 2 lc rgb colorGet("c6") t "$N_{\\mathrm{Rep}}=32$ ",\
+"data/dist_comp_errores_horizontal_ws016_r08_nb000000_X.txt" u 1:2:3 w xerrorbars lw 2 lc rgb colorGet("c7") t "$N_{\\mathrm{Rep}}=16$ ",\
+"data/curva_extrapolada_free_expo_T0708_xi11_r08_X.txt" u 2:1 lw 2 lc rgb colorGet("c8") t "Extrapolation"
+
+set origin .65,.52
+set size .3,.3
+unset logs y
+unset key
+unset object
+unset arrow
+unset xlabel
+unset ylabel
+unset title
+
+set xrange [0.985999:0.988001] 
+set xtics (0.986,0.987,0.988)
+set yrange [0.29999:0.420001]
+set ytics (0.30,0.33,0.36,0.39,0.42)
+
+p [0.986:0.988] "data/dist_comp_errores_horizontal_ws512_r08_nb000000_X.txt" u 1:2:3 w xerrorbars lw 2 lc rgb colorGet("c2") t "$N_{\\mathrm{Rep}}=512$",\
+"data/dist_comp_errores_horizontal_ws256_r08_nb000000_X.txt" u 1:2:3 w xerrorbars lw 2 lc rgb colorGet("c3") t "$N_{\\mathrm{Rep}}=256$",\
+"data/dist_comp_errores_horizontal_ws064_r08_nb000000_X.txt" u 1:2:3 w xerrorbars lw 2 lc rgb colorGet("c4") t "$N_{\\mathrm{Rep}}=128$",\
+"data/dist_comp_errores_horizontal_ws128_r08_nb000000_X.txt" u 1:2:3 w xerrorbars lw 2 lc rgb colorGet("c5") t "$N_{\\mathrm{Rep}}=64$ ",\
+"data/dist_comp_errores_horizontal_ws032_r08_nb000000_X.txt" u 1:2:3 w xerrorbars lw 2 lc rgb colorGet("c6") t "$N_{\\mathrm{Rep}}=32$ ",\
+"data/dist_comp_errores_horizontal_ws016_r08_nb000000_X.txt" u 1:2:3 w xerrorbars lw 2 lc rgb colorGet("c7") t "$N_{\\mathrm{Rep}}=16$ ",\
+"data/curva_extrapolada_free_expo_T0708_xi11_r08_X.txt" u 2:1 lw 2 lc rgb colorGet("c8") t "Extrapolation"
+
+
+set origin .6,.1
+set size .35,.35
+set xrange [-0.0001:1.00001] 
+set yrange [-0.0001:35]
+set xtics 0,0.2,1
+set ytics 0,10,30
+
+unset logs y
+set key top left
+set title "$\\chi^2 / \\mathrm{d.o.f}$ vs F($X,T_1,T_2,\\xi,r$)" offset 0,-0.5
+p "data/curva_extrapolada_free_expo_T0708_xi11_r08_X.txt" u 1:4 w lp not lw 3 lc rgb colorGet("c2") , 1 lw 3 lc rgb colorGet("c3") t ""
+
+set origin .09,.52 
+set size .3,.3 
+unset logs y 
+unset format y 
+set key top right 
+set title "$\\gamma$ vs F($X,T_1,T_2,\\xi,r$)" offset 0,-0.5 
+set xrange [-0.001:1.001] 
+set xtics (0,0.2,0.4,0.6,0.8,1) 
+set xtics font ",12" 
+set yrange [-0.001:8.001] 
+set ytics (0,2,4,6,8)
+
+p "data/curva_extrapolada_free_expo_T0708_xi11_r08_X.txt" u 1:3 w lp lw 3 lc rgb colorGet("c2") not , 1 lw 3 lc rgb colorGet("c3") t ""
+
+unset multiplot

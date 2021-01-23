@@ -1,0 +1,5 @@
+Column 1: F(X)
+Column 2: Chaotic parameter X
+Column 3: Error of the chaotic parameter X
+Column 4 (if exists): $\chi^2$ of the fit
+Column 5 (if exists): degree of freedom of the fit
