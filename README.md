@@ -4,7 +4,7 @@ The scripts and the data needed to reproduce the figures on the article "Tempera
 
 Each directory corresponds to one figure. Inside each directory you can find:
 
-A .gpt script of the figure.
+A gnuplot (.gpt) script of the figure.
 A directory "data" with all the needed data for the figure.
 A "data_information.txt" where the data files are explained.
 A .pdf with the produced figure.
